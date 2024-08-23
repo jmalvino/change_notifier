@@ -1,15 +1,25 @@
+import 'package:change_notifier/app/pages/home_page/home_controller.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
-
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final HomeController _homeController = HomeController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _homeController.addListener(() {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,22 +29,26 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Stack(
         children: [
-          ListView.builder(
-            padding: const EdgeInsets.only(bottom: 145),
-            itemCount: 20,
-            itemBuilder: (_, index) => ListTile(
-              leading: CircleAvatar(
-                child: Center(
-                  child: Text(
-                    index.toString(),
+          _homeController.names.isEmpty
+              ? const Center(
+                  child: Text('Lista Vazia'),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 145),
+                  itemCount: _homeController.names.length,
+                  itemBuilder: (_, index) => ListTile(
+                    leading: CircleAvatar(
+                      child: Center(
+                        child: Text(
+                          _homeController.names[index][0],
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      _homeController.names[index],
+                    ),
                   ),
                 ),
-              ),
-              title: Text(
-                'Index $index',
-              ),
-            ),
-          ),
           Positioned(
             bottom: 0,
             right: 0,
@@ -62,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                           decoration: InputDecoration(
                             hintText: 'Digite um nome',
                             border: OutlineInputBorder(
-                              borderRadius:  BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(20),
                               borderSide: const BorderSide(width: 2),
                             ),
                           ),
@@ -70,9 +84,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     SizedBox(
-                      width:30,
+                      width: 30,
                       child: GestureDetector(
-                        onTap: (){
+                        onTap: () {
+                          _homeController.addName(name: _nameController.text);
                           _nameController.clear();
                         },
                         child: CircleAvatar(
