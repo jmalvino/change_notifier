@@ -16,9 +16,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _homeController.addListener(() {
-      setState(() {});
-    });
+    // _homeController.names.addListener(() {
+    //   setState(() {});
+    // });
   }
 
   @override
@@ -29,26 +29,30 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Stack(
         children: [
-          _homeController.names.isEmpty
-              ? const Center(
-                  child: Text('Lista Vazia'),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.only(bottom: 145),
-                  itemCount: _homeController.names.length,
-                  itemBuilder: (_, index) => ListTile(
-                    leading: CircleAvatar(
-                      child: Center(
-                        child: Text(
-                          _homeController.names[index][0],
+          AnimatedBuilder(
+              animation: _homeController.names,
+              builder: (_, __) {
+                return _homeController.names.value.isEmpty
+                    ? const Center(
+                        child: Text('Lista Vazia'),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 145),
+                        itemCount: _homeController.names.value.length,
+                        itemBuilder: (_, index) => ListTile(
+                          leading: CircleAvatar(
+                            child: Center(
+                              child: Text(
+                                _homeController.names.value[index][0],
+                              ),
+                            ),
+                          ),
+                          title: Text(
+                            _homeController.names.value[index],
+                          ),
                         ),
-                      ),
-                    ),
-                    title: Text(
-                      _homeController.names[index],
-                    ),
-                  ),
-                ),
+                      );
+              }),
           Positioned(
             bottom: 0,
             right: 0,

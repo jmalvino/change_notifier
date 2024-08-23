@@ -1,16 +1,15 @@
 
 import 'package:flutter/material.dart';
 
-class HomeController extends ChangeNotifier {
+class HomeController{
 
-  final List<String> _names = [];
+  final ValueNotifier<List<String>> _names = ValueNotifier<List<String>>([]);
 
-  List<String> get names => _names;
+  ValueNotifier<List<String>>  get names => _names;
 
 
   void addName({required name}){
-    _names.add(name);
-    notifyListeners();
+    _names.value = List.from(_names.value)..add(name);
   }
 
 
